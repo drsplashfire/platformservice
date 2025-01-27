@@ -1,0 +1,9 @@
+bin/
+obj/
+*.dll
+*.pdb
+*.log
+.vs/
+.vscode/
+*.user
+*.db

@@ -8,6 +8,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandsService", "..\CommandsService\CommandsService.csproj", "{A932E150-73E0-4445-A2BB-566EB7B0B3A8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "K8S", "K8S", "{2D63C9C7-320D-479F-829D-D8AA44D95F14}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\source\repos\K8S\platforms-depl.yaml = ..\..\source\repos\K8S\platforms-depl.yaml
+		..\..\source\repos\K8S\platforms-np-srv.yaml = ..\..\source\repos\K8S\platforms-np-srv.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

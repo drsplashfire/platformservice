@@ -1,6 +1,6 @@
-@platformservice_HostAddress = http://localhost:5295
+@PlatformService_HostAddress = http://localhost:5175
 
-GET {{platformservice_HostAddress}}/weatherforecast/
+GET {{PlatformService_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

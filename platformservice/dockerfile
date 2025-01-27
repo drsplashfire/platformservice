@@ -1,0 +1,35 @@
+# Build Stage
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-env
+WORKDIR /App
+
+# Copy csproj and restore dependencies
+COPY PlatformService/*.csproj ./
+RUN dotnet restore
+
+# Copy everything else and build
+COPY . ./
+RUN dotnet publish PlatformService/PlatformService.csproj -c Release -o out
+
+# Runtime Stage
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+WORKDIR /App
+
+# Set environment variables for container configuration
+ENV ASPNETCORE_URLS=http://+:80
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+
+# # Create a non-root user for security
+# RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /App
+# USER appuser
+
+# Copy the published application
+COPY --from=build-env /App/out .
+
+# Ensure proper handling of configuration files
+COPY PlatformService/appsettings*.json ./
+RUN chmod 400 appsettings*.json
+
+EXPOSE 80
+
+ENTRYPOINT ["dotnet", "PlatformService.dll"]
