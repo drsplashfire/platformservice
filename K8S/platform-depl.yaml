@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: plt-depl
+  name: platform-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pltsvc
+      app: platformservice
   template:
     metadata:
       labels:
-        app: pltsvc
+        app: platformservice
     spec:
       containers:
-      - name: pltsvc
-        image: gandlaroopeshkumar/pltsvc:latest
+      - name: platformservice
+        image: gandlaroopeshkumar/platformservice:latest
 ---
 apiVersion: v1
 kind: Service
@@ -23,9 +23,9 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: pltsvc
+    app: platformservice
   ports:
-  - name: pltsvc
+  - name: platformservice
     protocol: TCP
     port: 80
     targetPort: 80
