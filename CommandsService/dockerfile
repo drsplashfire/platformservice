@@ -8,7 +8,7 @@ RUN dotnet restore
 
 # Copy everything else and build
 COPY . ./
-RUN dotnet publish PlatformService.csproj -c Release -o out
+RUN dotnet publish CommandsService.csproj -c Release -o out
 
 # Runtime Stage
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
@@ -28,4 +28,4 @@ RUN chmod 400 appsettings*.json
 
 EXPOSE 80
 
-ENTRYPOINT ["dotnet", "PlatformService.dll"]
+ENTRYPOINT ["dotnet", "CommandsService.dll"]
