@@ -19,6 +19,8 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDataba
 builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
 builder.Services.AddHttpClient<ICommanDataCLient, HttpCommandDataCLient>();
 
+Console.WriteLine($"the server is running on endpoint: {builder.Configuration["CommandsService"]}");
+
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
