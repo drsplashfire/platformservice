@@ -12,8 +12,6 @@ namespace CommandsService.Profiles
             CreateMap<Platform, PlatformReadDto>( );
             CreateMap<CommandCreateDto, Command>( );
             CreateMap<Command, CommandReadDto>( );
-
         }
-
     }
 }

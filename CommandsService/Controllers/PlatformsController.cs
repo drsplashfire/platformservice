@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using CommandsService.Data;
+using CommandsService.Dtos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CommandsService.Controllers
 {
@@ -7,10 +10,25 @@ namespace CommandsService.Controllers
     public class PlatformsController : ControllerBase
     {
         private readonly ILogger<PlatformsController> _logger;
+        private readonly IcommandRepo _repository;
+        private readonly IMapper _mapper;
 
-        public PlatformsController(ILogger<PlatformsController> logger)
+        public PlatformsController(
+            IcommandRepo repository,
+            IMapper mapper,
+            ILogger<PlatformsController> logger)
         {
             _logger= logger;
+            _repository= repository;
+            _mapper = mapper;
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<PlatformReadDto>> GetAllPlatforms() 
+        {
+            Console.WriteLine(" --> getting platforms");
+            var platformItems = _repository.GetAllPlatforms();
+            return Ok(_mapper.Map<IEnumerable<PlatformReadDto>>(platformItems));
         }
 
         [HttpPost]
