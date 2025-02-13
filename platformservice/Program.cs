@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PlatformService.AsyncDataServices;
 using PlatformService.Controllers;
 using PlatformService.Data;
 using PlatformService.SyncDataServices.Http;
@@ -26,6 +27,7 @@ else
     builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMem"));
 }
 builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
+builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 builder.Services.AddHttpClient<ICommanDataCLient, HttpCommandDataCLient>();
 
 Console.WriteLine($"the server is running on endpoint: {builder.Configuration["CommandsService"]}");
