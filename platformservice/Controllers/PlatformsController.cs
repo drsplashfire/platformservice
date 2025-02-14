@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PlatformService.AsyncDataServices;
 using PlatformService.Data;
@@ -14,73 +17,62 @@ namespace PlatformService.Controllers
     {
         private readonly IPlatformRepo _repository;
         private readonly IMapper _mapper;
-        private readonly ILogger<PlatformsController> _logger;
-        private readonly ICommanDataCLient _commanDataCLient;
+        private readonly ICommandDataClient _commandDataClient;
         private readonly IMessageBusClient _messageBusClient;
 
-        public PlatformsController(IPlatformRepo repository,
+        public PlatformsController(
+            IPlatformRepo repository,
             IMapper mapper,
-            ILogger<PlatformsController> logger,
-            ICommanDataCLient commanDataCLient,
+            ICommandDataClient commandDataClient,
             IMessageBusClient messageBusClient)
         {
             _repository = repository;
             _mapper = mapper;
-            _logger = logger;
-            _commanDataCLient = commanDataCLient;
+            _commandDataClient = commandDataClient;
             _messageBusClient = messageBusClient;
         }
 
         [HttpGet(Name = "GetAllPlatforms")]
         public ActionResult<PlatformReadDto> GetAllPlatforms()
         {
-            _logger.LogInformation("Getting all platforms");
-            var platformItem = _repository.GetAllPlatforms();
-            if (platformItem != null)
-            {
-                return Ok(_mapper.Map<IEnumerable<PlatformReadDto>>(platformItem));
-            }
-            else
-            {
-                _logger.LogInformation("no platforms");
+            Console.WriteLine("--> Getting Platforms....");
 
-                return NoContent();
-            }
+            var platformItem = _repository.GetAllPlatforms();
+
+            return Ok(_mapper.Map<IEnumerable<PlatformReadDto>>(platformItem));
         }
 
-        [HttpGet("{id}", Name = "GetPlatformById") ]
+        [HttpGet("{id}", Name = "GetPlatformById")]
         public ActionResult<PlatformReadDto> GetPlatformById(int id)
-        { 
+        {
             var platformItem = _repository.GetPlatformById(id);
-            if (platformItem != null)
+            if ( platformItem != null )
             {
-                _logger.LogInformation($"Found {platformItem.Id}");
                 return Ok(_mapper.Map<PlatformReadDto>(platformItem));
             }
-            else
-            {
-                _logger.LogInformation("platform not found.");
-            }
-            return NotFound();  
+
+            return NotFound();
         }
 
-        [HttpPost(Name = "CreatePlatform")]
+        [HttpPost]
         public async Task<ActionResult<PlatformReadDto>> CreatePlatform(PlatformCreateDto platformCreateDto)
         {
             var platformModel = _mapper.Map<Platform>(platformCreateDto);
             _repository.CreatePlatform(platformModel);
             _repository.SaveChanges();
+
             var platformReadDto = _mapper.Map<PlatformReadDto>(platformModel);
 
-            //Send Sync Message
+            // Send Sync Message
             try
             {
-                await _commanDataCLient.SendPlatformToCommand(platformReadDto);
+                await _commandDataClient.SendPlatformToCommand(platformReadDto);
             }
-            catch ( Exception ex ) 
+            catch ( Exception ex )
             {
-                Console.WriteLine($"could not send synchronously {ex.Message}" );
+                Console.WriteLine($"--> Could not send synchronously: {ex.Message}");
             }
+
             //Send Async Message
             try
             {
@@ -94,7 +86,7 @@ namespace PlatformService.Controllers
             }
 
             return CreatedAtRoute(nameof(GetPlatformById), new { platformReadDto.Id }, platformReadDto);
-        }
+            }
 
         [HttpDelete( "{id}", Name = "DeletePlatformById" )]
         public ActionResult DeletePlatformById( int id )
@@ -102,12 +94,12 @@ namespace PlatformService.Controllers
             var platformItem = _repository.DeletePlatformById( id );
             if ( platformItem  )
             {
-                _logger.LogInformation( $"Found {id} &deleted" );
+                Console.WriteLine( $"Found {id} &deleted" );
                 return NoContent( );
             }
             else
             {
-                _logger.LogInformation($"{id}platform not found.");
+                Console.WriteLine($"{id}platform not found.");
             }
             return NotFound( );
         }

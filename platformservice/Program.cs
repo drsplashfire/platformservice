@@ -28,7 +28,7 @@ else
 }
 builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
 builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
-builder.Services.AddHttpClient<ICommanDataCLient, HttpCommandDataCLient>();
+builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataCLient>();
 
 Console.WriteLine($"the server is running on endpoint: {builder.Configuration["CommandsService"]}");
 
