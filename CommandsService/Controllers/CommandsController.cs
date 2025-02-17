@@ -55,7 +55,7 @@ namespace CommandsService.Controllers
             }
         }
         [HttpPost]
-        public ActionResult<CommandReadDto> CreateCommandForPlatform(CommandCreateDto commandCreateDto, int platformId)
+        public ActionResult<CommandReadDto> CreateCommandForPlatform(int platformId, [FromBody] CommandCreateDto commandCreateDto)
         {
             Console.WriteLine($"--> hit CreateCommandForPlatform {platformId}");
             if ( !_repository.PlatformExists(platformId) )
