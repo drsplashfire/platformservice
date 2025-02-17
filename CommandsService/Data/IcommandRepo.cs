@@ -18,6 +18,7 @@ namespace CommandsService.Data
         Command GetCommand(int platformId, int commandId);
         void DeleteCommand(int commandId);
         void CreateCommand(Command command, int platformId);
+        bool ExternalPlatformExists(int ExternalPlatformId);
 
         #endregion
 

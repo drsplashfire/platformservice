@@ -1,4 +1,5 @@
 ﻿using CommandsService.Models;
+using System;
 //using PlatformService.Models;
 
 namespace CommandsService.Data
@@ -49,6 +50,12 @@ namespace CommandsService.Data
                 return true;
             }
             return false;
+        }
+
+        public bool ExternalPlatformExists(int ExternalPlatformId)
+        {
+            return _context.Platforms.Any(p => p.ExternalId == ExternalPlatformId);
+
         }
 
         public IEnumerable<Platform> GetAllPlatforms( )
