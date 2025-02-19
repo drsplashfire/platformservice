@@ -1,5 +1,4 @@
-﻿using PlatformService.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CommandsService.Models
 {
